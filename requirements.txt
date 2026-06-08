@@ -1,0 +1,20 @@
+# --- Core API (required to import & run the app, no torch) ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+SQLAlchemy==2.0.36
+python-dotenv==1.0.1
+
+# --- Vector store ---
+faiss-cpu==1.9.0.post1
+numpy==2.2.1
+
+# --- Local model stack (lazy-imported; only needed when *_PROVIDER=local) ---
+transformers==4.48.0
+torch==2.5.1
+sentence-transformers==3.3.1
+
+# --- Tests ---
+pytest==8.3.4
+httpx==0.28.1

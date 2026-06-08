@@ -1,0 +1,33 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: context-manager:latest
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: sqlite:///./data/context.db
+      FAISS_INDEX_PATH: ./data/faiss.index
+      LLM_PROVIDER: ${LLM_PROVIDER:-local}
+      LLM_MODEL_NAME: Qwen/Qwen2.5-0.5B-Instruct
+      EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-local}
+      EMBEDDING_MODEL_NAME: sentence-transformers/all-MiniLM-L6-v2
+      EMBEDDING_DIM: "384"
+      MAX_CONTEXT_TOKENS: "2048"
+      COMPRESS_TOKEN_THRESHOLD: "3000"
+      RECENT_MESSAGES_KEEP: "10"
+      RETRIEVAL_TOP_K: "5"
+      RETRIEVAL_OVERFETCH: "5"
+      LOG_LEVEL: INFO
+    volumes:
+      - app_data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  app_data:
